@@ -7,9 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+
 
 public class PlayerFragment extends Fragment {
 
@@ -22,45 +23,39 @@ public class PlayerFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_player, container, false);
 
         final TextView touchCountTextView = view.findViewById(R.id.touchCountTextView);
 
+        LiveData<Integer> touchCountLiveData;
+        if (playerId == 1) {
+            touchCountLiveData = viewModel.getPlayer1TouchCount();
+        } else {
+            touchCountLiveData = viewModel.getPlayer2TouchCount();
+        }
+
+        touchCountLiveData.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer count) {
+                touchCountTextView.setText("Player " + playerId + " Count: " + count);
+
+                if (count >= 10) {
+                    touchCountTextView.setText("Player " + playerId + " wins!");
+                    view.setOnTouchListener(null);
+                    showCongratulationsToast(playerId);
+                }
+            }
+        });
+
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (playerId == 1) {
                     viewModel.incrementPlayer1TouchCount();
-                    int player1Count = viewModel.getPlayer1TouchCount();
-                    touchCountTextView.setText("Player " + playerId + " Count: " + player1Count);
-
-                    if (player1Count >= 10) {
-                        // Detener el conteo y mostrar el mensaje de victoria
-                        touchCountTextView.setText("Player " + playerId + " wins!");
-                        v.setOnTouchListener(null); // Deshabilitar el listener para evitar más toques
-
-                        // Mostrar la notificación (Toast) de felicitaciones
-                        showCongratulationsToast(playerId);
-                    }
-                } else if (playerId == 2) {
+                } else {
                     viewModel.incrementPlayer2TouchCount();
-                    int player2Count = viewModel.getPlayer2TouchCount();
-                    touchCountTextView.setText("Player " + playerId + " Count: " + player2Count);
-
-                    if (player2Count >= 10) {
-                        // Detener el conteo y mostrar el mensaje de victoria
-                        touchCountTextView.setText("Player " + playerId + " wins!");
-                        v.setOnTouchListener(null);
-                        showCongratulationsToast(playerId);
-                    }
                 }
                 return true;
             }
@@ -68,6 +63,8 @@ public class PlayerFragment extends Fragment {
 
         return view;
     }
+
+
 
     private void showCongratulationsToast(int playerId) {
         String message = "¡Felicidades, Jugador " + playerId + "!";
