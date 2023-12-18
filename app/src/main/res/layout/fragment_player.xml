@@ -8,7 +8,7 @@
         android:id="@+id/touchCountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Player Count: 0"
+        android:text="Conteo de Jugador: 0"
         android:textSize="24sp"
         android:textColor="#FFFFFF"
         android:layout_centerInParent="true"/>
