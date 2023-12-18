@@ -42,6 +42,13 @@ public class MainViewModel extends ViewModel {
         }
     }
 
+    public String getTouchCount() {
+        return null;
+    }
+
+    public void incrementTouchCount() {
+    }
+
     public static class GameOverState {
         private int winner;
         private int result;
