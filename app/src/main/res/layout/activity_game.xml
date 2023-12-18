@@ -11,14 +11,14 @@
         android:id="@+id/guideline"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5"
-        android:background="#4CAF50"/>
+        />
 
     <FrameLayout
         android:id="@+id/fragmentContainerLeft"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#4CAF50"
+        android:background="#71E38D"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +34,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        android:background="#4CAF50"/>
+        android:background="#3FE383"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

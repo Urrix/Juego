@@ -7,10 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-
+import androidx.lifecycle.ViewModelProvider;
 
 public class PlayerFragment extends Fragment {
 
@@ -20,6 +21,12 @@ public class PlayerFragment extends Fragment {
 
     public PlayerFragment(int playerId) {
         this.playerId = playerId;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
     }
 
     @Override
@@ -40,12 +47,15 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onChanged(Integer count) {
                 touchCountTextView.setText("Player " + playerId + " Count: " + count);
+            }
+        });
 
-                if (count >= 10) {
-                    touchCountTextView.setText("Player " + playerId + " wins!");
-                    view.setOnTouchListener(null);
-                    showCongratulationsToast(playerId);
-                }
+        viewModel.getGameOverState().observe(getViewLifecycleOwner(), new Observer<MainViewModel.GameOverState>() {
+            @Override
+            public void onChanged(MainViewModel.GameOverState gameOverState) {
+                int winner = gameOverState.getWinner();
+                int result = gameOverState.getResult();
+                showGameOverMessage(winner, result);
             }
         });
 
@@ -64,10 +74,8 @@ public class PlayerFragment extends Fragment {
         return view;
     }
 
-
-
-    private void showCongratulationsToast(int playerId) {
-        String message = "¡Felicidades, Jugador " + playerId + "!";
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    private void showGameOverMessage(int winner, int result) {
+        String message = "Game Over!\nPlayer " + winner + " wins with a score of " + result;
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
     }
 }
