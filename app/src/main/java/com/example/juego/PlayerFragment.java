@@ -7,11 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+
 
 public class PlayerFragment extends Fragment {
 
@@ -21,12 +20,6 @@ public class PlayerFragment extends Fragment {
 
     public PlayerFragment(int playerId) {
         this.playerId = playerId;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
     }
 
     @Override
@@ -70,6 +63,7 @@ public class PlayerFragment extends Fragment {
 
         return view;
     }
+
 
 
     private void showCongratulationsToast(int playerId) {
