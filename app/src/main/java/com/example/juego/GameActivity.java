@@ -1,11 +1,16 @@
 package com.example.juego;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Bundle;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -14,7 +19,10 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
+        Intent intent = getIntent();
+
+
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
@@ -29,5 +37,6 @@ public class GameActivity extends AppCompatActivity {
 
             fragmentTransaction.commit();
         }
+
     }
 }
